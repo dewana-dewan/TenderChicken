@@ -106,6 +106,16 @@ router.get('/make_contract', function(req, res) {
 	}, 1000);
 });
 
+router.get('/getContract', function(req, res) {
+	var dir = __dirname;
+	dir = dir.replace('/n_app', '/app');
+	console.log(dir + '/upload_tender.html');
+	res.sendFile(dir + '/hash.html');
+	// res.sendFile('./app/hash.html');
+})
+
+
+
 router.get('/upload_tender', function(req, res) {
 	var id_name = req.query.name;
 	var dir = __dirname;
@@ -124,6 +134,8 @@ router.get('/get_contract', function(req, res) {
 		  	console.log(result[0].address);
 			res.json(result[0].address);
 		  });
+
+
 
 });
 
