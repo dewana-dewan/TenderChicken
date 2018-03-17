@@ -1,4 +1,5 @@
 const express        = require('express');
+var cors             = require('cors');
 var router           = express.Router();
 const bodyParser     = require('body-parser');
 const app            = express();
@@ -41,6 +42,7 @@ var server = app.listen(port, function() {
 });
 
 app.use('/api', router);
+app.use(cors());
 
 router.get('/test_upload',  function(req, res) {
 	  res.writeHead(200, {'Content-Type': 'text/html'});
