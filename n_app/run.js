@@ -3,7 +3,17 @@ var router           = express.Router();
 const bodyParser     = require('body-parser');
 const app            = express();
 var mysql = require('mysql');
-var formidable = require('formidable');
+
+var multer  = require('multer')
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.pdf');
+  }
+});
+var upload = multer({ storage: storage })
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -24,18 +34,6 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var fs = require("fs");
 solc = require('solc');
 
-
-// mongoose.connect('mongodb+srv://dewan:dewan123@hint1-aytbe.mongodb.net/test')
-// var TenderSchema = new mongoose.Schema({  
-//   name: String,
-//   address: String,
-//   abi: String,
-//   bytecode: String,
-//   link: String
-// });
-// mongoose.model('Tender', TenderSchema);
-// module.exports = mongoose.model('Tender');
-
 var port = process.env.PORT || 3000;
 
 var server = app.listen(port, function() {
@@ -48,6 +46,7 @@ router.get('/test_upload',  function(req, res) {
 	  res.writeHead(200, {'Content-Type': 'text/html'});
   res.write('<form action="http://localhost:3000/api/fileupload" method="post" enctype="multipart/form-data">');
   res.write('<input type="file" name="filetoupload"><br>');
+  res.write('<input type="text" name="tenderId" value="adia"><br>');
   res.write('<input type="submit">');
   res.write('</form>');
   return res.end();
@@ -88,10 +87,15 @@ router.get('/make_contract', function(req, res) {
 	}, 1000);
 });
 
-router.post('/fileupload', function(){
-	var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      res.write('File uploaded');
-      res.end();
-    });
+router.post('/fileupload', upload.single('filetoupload'),  function(req, res, next){
+	console.log(req.file);
+	console.log(req.body);
+	var tenderId = req.body.tenderId;
+	var fileName = req.file.path;
+	var update_sql = "update tenders set link='" + fileName + "' where tenderId='" + tenderId + "'"; 
+	con.query(update_sql, function (err, result) {
+		    if (err) throw err;
+		    console.log("Number of records inserted: " + result.affectedRows);
+		  });
+	return res.end('File done');
 });
