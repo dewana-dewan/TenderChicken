@@ -154,27 +154,32 @@ $(document ).ready(function() {
 
     //submit hash
     $('#submit-hash').click(function(event) {
-      
+
       var xhttp = new XMLHttpRequest();
       var t;
       xhttp.onreadystatechange = function() {
       
-      if (this.readyState == 4 && this.status == 200) {
-          t = this.responseText;
-          console.log(t);
-        }
-      };
+          if (this.readyState == 4 && this.status == 200) {
+              bidContractAddr = this.responseText;
+              console.log(bidContractAddr);
+            }
+          };
 
       k = document.getElementById("bidder").value;
       xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
       xhttp.send();
 
+      bidderName = document.getElementById("bidder").value;
 
+      //communication with blockchain starts
+      VotingContract = web3.eth.contract(abi);
+      contractInstance = VotingContract.at(bidContractAddr);
+      
+      contractInstance.submit_hash(bidderName, {from: web3.eth.accounts[0]}, function() {
 
-    });//submit click ends
+        console.log('hash submmitted');
 
-     
-
+      });//submit click ends
 });
 
 </script>

@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 contract bid {
-    mapping(address => bytes32) public hash_map;
+    mapping(bytes32 => bytes32) public hash_map;
     address[] public clientAddress;
 
     uint8 count;
