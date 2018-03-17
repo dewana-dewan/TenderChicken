@@ -25,7 +25,7 @@ var upload = multer({ storage: storage })
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "codebuildhack",
+  password: "iiita123",
   database: "hint_test"
 });
 
@@ -76,19 +76,19 @@ router.get('/make_contract', function(req, res) {
 	var id_name = req.query.name
 	console.log(req.query, req.body);
 
-	code = fs.readFileSync('./contracts/Voting.sol').toString()
+	code = fs.readFileSync('./contracts/bid.sol').toString()
 	compiledCode = solc.compile(code)
-	abipre = compiledCode.contracts[':Voting'].interface;
-	abiDefinition = JSON.parse(compiledCode.contracts[':Voting'].interface)
-	VotingContract = web3.eth.contract(abiDefinition)
-	byteCode = compiledCode.contracts[':Voting'].bytecode
-	deployedContract = VotingContract.new(['Rama','Nick','Jose'],{data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
+	abipre = compiledCode.contracts[':bid'].interface;
+	abiDefinition = JSON.parse(compiledCode.contracts[':bid'].interface)
+	bidContract = web3.eth.contract(abiDefinition)
+	byteCode = compiledCode.contracts[':bid'].bytecode
+	deployedContract = bidContract.new({data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
 
 	setTimeout(function () {
 		var a = deployedContract.address
 		var link = 'test_link';
 		console.log(a)
-		contractInstance = VotingContract.at(deployedContract.address);
+		contractInstance = bidContract.at(deployedContract.address);
 		var insert_sql = "insert into tenders (tenderId , address , link) values ('" + id_name + "', '" + a + "', '" + link + "')";
 		var new_obj = [id_name, a, link];
 		console.log(insert_sql);
@@ -99,7 +99,7 @@ router.get('/make_contract', function(req, res) {
 
 		glo_hash[id_name] = {
 							address: a, 
-							abiDefinition: JSON.parse(compiledCode.contracts[':Voting'].interface), 
+							abiDefinition: JSON.parse(compiledCode.contracts[':bid'].interface), 
 							bytecode: byteCode
 						};
     	res.redirect('/api/upload_tender?name=' + id_name);   
@@ -121,8 +121,8 @@ router.get('/get_contract', function(req, res) {
 	con.query(get_sql, function (err, result) {
 		    if (err) throw err;
 		    console.log("Number of records inserted: " + result.affectedRows);
-		  	console.log(result);
-			res.json(result);
+		  	console.log(result[0].address);
+			res.json(result[0].address);
 		  });
 
 });
