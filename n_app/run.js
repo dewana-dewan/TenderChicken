@@ -3,6 +3,7 @@ var cors             = require('cors');
 var router           = express.Router();
 const bodyParser     = require('body-parser');
 const app            = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 var mysql = require('mysql');
 
 var multer  = require('multer')
@@ -54,10 +55,16 @@ router.get('/test_upload',  function(req, res) {
   return res.end();
 });
 
+router.post('/submit_contract', function(req, res) {
+	console.log(req);
+	return res.end('asdas');
+
+});
+
 router.get('/make_contract', function(req, res) {
 
 	var id_name = req.query.name
-	console.log(id_name);
+	console.log(req.query, req.body);
 
 	code = fs.readFileSync('./contracts/Voting.sol').toString()
 	compiledCode = solc.compile(code)
@@ -113,3 +120,4 @@ router.post('/fileupload', upload.single('filetoupload'),  function(req, res, ne
 		  });
 	return res.end('File done');
 });
+
