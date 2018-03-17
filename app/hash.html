@@ -87,6 +87,7 @@
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
 
+      var hash;
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       var openFile = function(event) {
         //alert("hello
@@ -95,7 +96,7 @@
             
                 reader.onload = function() {
                 var data = reader.result;
-                var hash = web3.sha3(data);
+                hash = web3.sha3(data);
                 var t = document.getElementById("textHash");         
                 t.innerText = hash;
         }
@@ -103,8 +104,45 @@
         reader.readAsText(input.files[0]);
       };
 
-
-abi = JSON.parse('[{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"validCandidate","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"votesReceived","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x","type":"bytes32"}],"name":"bytes32ToString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"candidateList","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"voteForCandidate","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"contractOwner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"inputs":[{"name":"candidateNames","type":"bytes32[]"}],"payable":false,"type":"constructor"}]')
+abi = [ { constant: false,
+    inputs: [ [Object] ],
+    name: 'submit_hash',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function' },
+  { constant: true,
+    inputs: [ [Object] ],
+    name: 'clientAddress',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: false,
+    inputs: [ [Object] ],
+    name: 'validate_hash',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function' },
+  { constant: true,
+    inputs: [ [Object] ],
+    name: 'hash_map',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: true,
+    inputs: [ [Object] ],
+    name: 'validateClient',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { inputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor' } ]
 
 function getAbi(){
 
@@ -135,17 +173,24 @@ var xhttp = new XMLHttpRequest();
     }
   };
 
-
+//console.log(t)
 //abi = getAbi();
-
-VotingContract = web3.eth.contract(abi);
-contractInstance = VotingContract.at(t);
 k = document.getElementById("bidder").value;
 
 xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
 xhttp.send();
 
+setTimeout(VotingContract = web3.eth.contract(abi),1000)
+contractInstance = VotingContract.at(t)
 
+contractInstance.submit_hash(hash, {from: web3.eth.accounts[0]}, function() {
+
+        console.log(contractInstance.count)
+
+  });
+
+
+console.log(hash)
 console.log(k)
 console.log("Hello There")
 }
