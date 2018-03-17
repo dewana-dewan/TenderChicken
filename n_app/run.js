@@ -6,6 +6,8 @@ const app            = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 var mysql = require('mysql');
 
+var glo_hash = {};
+var pel_hash = {};
 var multer  = require('multer')
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,7 +48,7 @@ app.use('/api', router);
 app.use(cors());
 
 router.get('/test_upload',  function(req, res) {
-	  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.writeHead(200, {'Content-Type': 'text/html'});
   res.write('<form action="http://localhost:3000/api/fileupload" method="post" enctype="multipart/form-data">');
   res.write('<input type="file" name="filetoupload"><br>');
   res.write('<input type="text" name="tenderId" value="adia"><br>');
@@ -56,9 +58,10 @@ router.get('/test_upload',  function(req, res) {
 });
 
 router.post('/submit_contract', function(req, res) {
-	console.log(req);
-	return res.end('asdas');
-
+	console.log(req.body);
+	var ans = req.body;
+	pel_hash[ans.title] = ans;
+	res.redirect('/api/make_contract?name=' + ans.title);
 });
 
 router.get('/make_contract', function(req, res) {
@@ -92,9 +95,18 @@ router.get('/make_contract', function(req, res) {
 							abiDefinition: JSON.parse(compiledCode.contracts[':Voting'].interface), 
 							bytecode: byteCode
 						};
-    	res.json(glo_hash[req.query.name]);   
+    	res.redirect('/api/upload_tender?name=' + id_name);   
 	}, 1000);
 });
+
+router.get('/upload_tender', function(req, res) {
+	var id_name = req.query.name;
+	var dir = __dirname;
+	dir = dir.replace('/n_app', '/app');
+	console.log(dir + '/hash.html');
+	res.sendFile(dir + '/hash.html');
+	// res.sendFile('./app/hash.html');
+})
 
 router.get('/get_contract', function(req, res) {
 	var id_name = req.query.name;

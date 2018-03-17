@@ -28,13 +28,14 @@
   <form action="http://localhost:3000/api/submit_contract" method="post">
   <div class="row" style="width:70vw">
     <h1>Create Tender</h1>
+
     <div class="input-field col s12">
-      <input value="" id="title" type="text" class="validate">
+      <input name="title" value="" id="title" type="text" class="validate">
       <label class="active" for="title">Enter The Title</label>
     </div>
 
     <div class="input-field col s12">
-      <select>
+      <select name="org">
         <option value="" disabled selected>Choose your option</option>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
@@ -43,22 +44,12 @@
       <label>Materialize Select</label>
     </div>
 
-<!--     <label>Upload File/ Tender</label>
-      <div class="file-field input-field">
-        <div class="btn">
-          <span>File</span>
-          <input type="file">
-        </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
-        </div>
-      </div> -->
     <label>DeadLine For Contractor SignUp</label>
-    <input type="text" class="datepicker">     
+    <input name="dead1" type="text" class="datepicker">     
     <div class="row">
     <label>DeadLine For TendorSubmission</label>
-    <input type="text" class="datepicker"> 
-    <button class="btn waves-effect waves-light" type="submit" name="action">Start
+    <input name="dead2" type="text" class="datepicker"> 
+    <button class="btn waves-effect waves-light" type="submit">Start
       <i class="material-icons right">send</i>
     </button>
   </div>
