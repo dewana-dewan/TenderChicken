@@ -38,7 +38,7 @@
     <div class="file-field input-field">
       <div class="btn">
         <span>File</span>
-        <input type="file" onchange="openFile(event);">
+        <input type="file" id = "input-file">
       </div>
       <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
@@ -47,7 +47,7 @@
   </form>
   <form action="#">
 	<div class="input-field">
-      		<div class="btn" onclick="submitHashToContract();">
+      		<div class="btn" id = "submit-hash">
        			 <span>Submit</span>
 		</div>
  		<div type="text" id = "textHash">
@@ -87,11 +87,11 @@
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
 
-$( document ).ready(function() {
+$(document ).ready(function() {
+        var hash;
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-      var hash;
-      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-      var openFile = function(event) {
+        $('#input-file').on('change', function(event) {
         //alert("hello
         var input = event.target;        
         var reader = new FileReader();
@@ -99,14 +99,19 @@ $( document ).ready(function() {
                 reader.onload = function() {
                 var data = reader.result;
                 hash = web3.sha3(data);
+                console.log(hash);
                 var t = document.getElementById("textHash");         
                 t.innerText = hash;
         }
 
         reader.readAsText(input.files[0]);
-      };
+      });
 
-abi = [ { constant: false,
+   // Hash generation done
+
+
+   //abi of contract
+   abi = [ { constant: false,
     inputs: [ [Object] ],
     name: 'submit_hash',
     outputs: [],
@@ -145,64 +150,13 @@ abi = [ { constant: false,
     payable: false,
     stateMutability: 'nonpayable',
     type: 'constructor' } ]
-
-
-function getAbi(){
-
-var xhttp = new XMLHttpRequest();
-  var t;
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      t = this.responseText;
-      console.log(t);
-    }
-  };
-
-xhttp.open("GET", "http://localhost:3000/api/get_abi", true);
-xhttp.send();
-
-return t;
-};
-
-
-function submitHashToContract(){
-
-var xhttp = new XMLHttpRequest();
-  var t;
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      t = this.responseText;
-      console.log(t);
-    }
-  };
-
-//console.log(t)
-//abi = getAbi();
-k = document.getElementById("bidder").value;
-
-xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
-xhttp.send();
+    // abi done
 
 
 
-var VotingContract = null
 
-VotingContract = web3.eth.contract(abi);
+     
 
-console.log(VotingContract);
+});
 
-setTimeout(function(){
-
-contractInstance = VotingContract.at(t)
-
-contractInstance.submit_hash(hash, {gas:140000, from: web3.eth.accounts[0]}).then(function() {
-        //console.log(contractInstance.count)
-console.log(hash)
-console.log(k)
-console.log("Hello There")
-})
-}, 1000);
-}
 </script>
-  </body>
-</html>
