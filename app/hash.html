@@ -101,12 +101,12 @@ $( document ).ready(function() {
                 hash = web3.sha3(data);
                 var t = document.getElementById("textHash");         
                 t.innerText = hash;
-        }
+                };
 
         reader.readAsText(input.files[0]);
       };
 
-abi = [ { constant: false,
+var abi = [ { constant: false,
     inputs: [ [Object] ],
     name: 'submit_hash',
     outputs: [],
@@ -167,7 +167,12 @@ return t;
 
 function submitHashToContract(){
 
+<<<<<<< HEAD
   var xhttp = new XMLHttpRequest();
+=======
+//VotingContract = web3.eth.contract(abi)
+var xhttp = new XMLHttpRequest();
+>>>>>>> bf848f02e3acde92601f0e67ab5ba7a242c71903
   var t;
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -183,6 +188,7 @@ k = document.getElementById("bidder").value;
 xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
 xhttp.send();
 
+<<<<<<< HEAD
 
 
 var VotingContract = null
@@ -190,6 +196,17 @@ var VotingContract = null
 VotingContract = web3.eth.contract(abi);
 
 console.log(VotingContract);
+=======
+abi = getAbi();
+console.log(abi)
+// contractInstance = web3.eth.contract(abi).at(t)
+
+// contractInstance.submit_hash(hash, {gas:140000, from: web3.eth.accounts[0]}, function (err,contract){
+
+//         console.log(contractInstance.count)
+
+//   });
+>>>>>>> bf848f02e3acde92601f0e67ab5ba7a242c71903
 
 setTimeout(function(){
 
@@ -200,9 +217,15 @@ contractInstance.submit_hash(hash, {gas:140000, from: web3.eth.accounts[0]}).the
 console.log(hash)
 console.log(k)
 console.log("Hello There")
+<<<<<<< HEAD
 });
 }, 1000);
 }
+=======
+};
+
+
+>>>>>>> bf848f02e3acde92601f0e67ab5ba7a242c71903
 </script>
   </body>
 </html>

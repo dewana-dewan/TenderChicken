@@ -71,6 +71,17 @@ router.post('/submit_contract', function(req, res) {
 	res.redirect('/api/make_contract?name=' + ans.title);
 });
 
+router.get('/get_abi', function(req, res) {
+
+	code = fs.readFileSync('./contracts/bid.sol').toString()
+	console.log("heeee")
+	compiledCode = solc.compile(code)
+	abipre = compiledCode.contracts[':bid'].interface;
+	abiDefinition = JSON.parse(compiledCode.contracts[':bid'].interface)
+	res.json(abiDefinition);
+
+});
+
 router.get('/make_contract', function(req, res) {
 
 	var id_name = req.query.name
