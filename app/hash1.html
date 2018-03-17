@@ -49,7 +49,7 @@
 	<div class="input-field">
       		<div class="btn" id = "submit-hash">
        			 <span>Submit</span>
-		</div>
+		      </div>
  		<div type="text" id = "textHash">
 		</div>
 	</div>
@@ -152,8 +152,26 @@ $(document ).ready(function() {
     type: 'constructor' } ]
     // abi done
 
+    //submit hash
+    $('#submit-hash').click(function(event) {
+      
+      var xhttp = new XMLHttpRequest();
+      var t;
+      xhttp.onreadystatechange = function() {
+      
+      if (this.readyState == 4 && this.status == 200) {
+          t = this.responseText;
+          console.log(t);
+        }
+      };
+
+      k = document.getElementById("bidder").value;
+      xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
+      xhttp.send();
 
 
+
+    });//submit click ends
 
      
 

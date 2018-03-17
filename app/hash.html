@@ -167,7 +167,7 @@ return t;
 
 function submitHashToContract(){
 
-var xhttp = new XMLHttpRequest();
+  var xhttp = new XMLHttpRequest();
   var t;
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -200,7 +200,7 @@ contractInstance.submit_hash(hash, {gas:140000, from: web3.eth.accounts[0]}).the
 console.log(hash)
 console.log(k)
 console.log("Hello There")
-})
+});
 }, 1000);
 }
 </script>
