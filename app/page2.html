@@ -24,6 +24,13 @@
 	
 
     <form action="#">
+      <div class="row">
+    <div class="input-field col s6">
+      <input value="" id="bidder" type="text" class="validate">
+      <label class="active" for="title">Enter Your Name</label>
+    </div>
+  </div>    
+
     <div class="file-field input-field">
       <div class="btn">
         <span>File</span>
@@ -36,7 +43,7 @@
   </form>
   <form action="#">
 	<div class="input-field">
-      		<div class="btn">
+      		<div class="btn" onclick="submitHashToContract();">
        			 <span>Submit</span>
 		</div>
  		<div type="text" id = "textHash">
@@ -86,6 +93,35 @@
 
         reader.readAsText(input.files[0]);
       };
+
+abi = JSON.parse('[{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"validCandidate","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"votesReceived","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x","type":"bytes32"}],"name":"bytes32ToString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"candidateList","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"voteForCandidate","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"contractOwner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"inputs":[{"name":"candidateNames","type":"bytes32[]"}],"payable":false,"type":"constructor"}]')
+
+VotingContract = web3.eth.contract(abi);
+
+
+function submitHashToContract(){
+
+var xhttp = new XMLHttpRequest();
+  var t;
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      t = this.responseText;
+      console.log(t);
+    }
+  };
+
+contractInstance = VotingContract.at(t);
+k = document.getElementById("bidder").value;
+
+xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
+xhttp.send();
+
+
+console.log(k)
+console.log("Hello There")
+
+}
+
 
 </script>
   </body>
