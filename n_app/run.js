@@ -3,8 +3,11 @@ var cors             = require('cors');
 var router           = express.Router();
 const bodyParser     = require('body-parser');
 const app            = express();
+const mustache       = require('mustache');
+app.set('view engine', mustache);
 app.use(bodyParser.urlencoded({ extended: true }));
 var mysql = require('mysql');
+
 
 var glo_hash = {};
 var pel_hash = {};
@@ -57,6 +60,10 @@ router.get('/test_upload',  function(req, res) {
   return res.end();
 });
 
+router.post('/succesful', function(req, res) {
+
+});
+
 router.post('/submit_contract', function(req, res) {
 	console.log(req.body);
 	var ans = req.body;
@@ -103,8 +110,8 @@ router.get('/upload_tender', function(req, res) {
 	var id_name = req.query.name;
 	var dir = __dirname;
 	dir = dir.replace('/n_app', '/app');
-	console.log(dir + '/hash.html');
-	res.sendFile(dir + '/hash.html');
+	console.log(dir + '/upload_tender.html');
+	res.sendFile(dir + '/upload_tender.html');
 	// res.sendFile('./app/hash.html');
 })
 
@@ -124,12 +131,18 @@ router.post('/fileupload', upload.single('filetoupload'),  function(req, res, ne
 	console.log(req.file);
 	console.log(req.body);
 	var tenderId = req.body.tenderId;
+	var type = req.body.type_upload;
 	var fileName = req.file.path;
-	var update_sql = "update tenders set link='" + fileName + "' where tenderId='" + tenderId + "'"; 
-	con.query(update_sql, function (err, result) {
-		    if (err) throw err;
-		    console.log("Number of records inserted: " + result.affectedRows);
-		  });
-	return res.end('File done');
+	if(type == 'tender') {
+		var update_sql = "update tenders set link='" + fileName + "' where tenderId='" + tenderId + "'"; 
+		con.query(update_sql, function (err, result) {
+			    if (err) throw err;
+			    console.log("Number of records inserted: " + result.affectedRows);
+			  });
+		var dir = __dirname;
+		dir = dir.replace('/n_app', '/app');
+		console.log(dir + '/operation_succesful.html');
+		res.sendFile(dir + '/operation_succesful.html');
+	}
 });
 
