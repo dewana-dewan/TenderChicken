@@ -53,7 +53,7 @@ router.get('/make_contract', function(req, res) {
 	code = fs.readFileSync('./contracts/Voting.sol').toString()
 	compiledCode = solc.compile(code)
 	abipre = compiledCode.contracts[':Voting'].interface;
-	abiDefinition = JSON.parse(abipre)
+	abiDefinition = JSON.parse(compiledCode.contracts[':Voting'].interface)
 	VotingContract = web3.eth.contract(abiDefinition)
 	byteCode = compiledCode.contracts[':Voting'].bytecode
 	deployedContract = VotingContract.new(['Rama','Nick','Jose'],{data: byteCode, from: web3.eth.accounts[0], gas: 4700000})
@@ -63,22 +63,15 @@ router.get('/make_contract', function(req, res) {
 		var link = 'test_link';
 		console.log(a)
 		contractInstance = VotingContract.at(deployedContract.address);
-		// console.log(typeof(abipre), abipre, abipre.toString());
-		var insert_sql = 'insert into tenders (tenderId , address , link) values ?';
+		var insert_sql = "insert into tenders (tenderId , address , link) values ('" + id_name + "', '" + a + "', '" + link + "')";
 		var new_obj = [id_name, a, link];
-		console.log(new_obj);
-		con.query(insert_sql, [new_obj], function (err, result) {
+		console.log(insert_sql);
+		con.query(insert_sql, function (err, result) {
 		    if (err) throw err;
 		    console.log("Number of records inserted: " + result.affectedRows);
 		  });
-		// Tender.create({
-		// 	  name: id_name,
-		// 	  address: a,
-		// 	  abi: JSON.parse(compiledCode.contracts[':Voting'].interface),
-		// 	  bytecode: byteCode,
-		// 	  link: 'String'
-		// })
-		glo_hash[req.query.name] = {
+
+		glo_hash[id_name] = {
 							address: a, 
 							abiDefinition: JSON.parse(compiledCode.contracts[':Voting'].interface), 
 							bytecode: byteCode
