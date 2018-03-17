@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Index</title>
+    <title>Hash</title>
   
   </head>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<script src="https://code.jquery.com/jquery-2.1.4.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
 
   <body>
     <nav>
@@ -24,53 +21,29 @@
       </div>
     </nav>
 
+	
 
-<div class="row">
-</div>
-  <div class="row">
-    <div class="input-field col s6">
-      <input value="" id="title" type="text" class="validate">
-      <label class="active" for="title">Enter The Title</label>
-    </div>
-  </div>
-
-  <label>Choose Organization</label>
-  <select class="browser-default">
-    <option value="" disabled selected>Choose your option</option>
-    <option value="1">Organization 1</option>
-    <option value="2">Organization 2</option>
-    <option value="3">Organization 3</option>
-  </select>
-
-<div class="row">
-</div>
-  <label>Upload File/ Tender</label>
-  <form action="#">
+    <form action="#">
     <div class="file-field input-field">
       <div class="btn">
         <span>File</span>
-        <input type="file">
+        <input type="file" onchange="openFile(event);">
       </div>
       <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
       </div>
     </div>
   </form>
-<div class="row">
-</div>
-  <label>DeadLine For Contractor SignUp</label>
-  <input type="text" class="datepicker"> 
-    
-<div class="row">
-</div>
-  <label>DeadLine For TendorSubmission</label>
-  <input type="text" class="datepicker"> 
-
-
-  <button class="btn waves-effect waves-light" type="submit" name="action">Start
-    <i class="material-icons right">send</i>
-  </button>
-  <footer class="page-footer">
+  <form action="#">
+	<div class="input-field">
+      		<div class="btn">
+       			 <span>Submit</span>
+		</div>
+ 		<div type="text" id = "textHash">
+		</div>
+	</div>
+</form>
+    <footer class="page-footer">
       <div class="container">
         <div class="row">
           <div class="col l6 s12">
@@ -94,15 +67,26 @@
         </div>
       </div>
     </footer>
-<script>
-    $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15, // Creates a dropdown of 15 years to control year,
-    today: 'Today',
-    clear: 'Clear',
-    close: 'Ok',
-    closeOnSelect: false // Close upon selecting a date,
-  });
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+<script type="text/javascript">
+
+      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      var openFile = function(event) {
+        //alert("hello
+        var input = event.target;        
+        var reader = new FileReader();
+            
+                reader.onload = function() {
+                var data = reader.result;
+                var hash = web3.sha3(data);
+                var t = document.getElementById("textHash");         
+                t.innerText = hash;
+        }
+
+        reader.readAsText(input.files[0]);
+      };
+
 </script>
   </body>
 </html>
