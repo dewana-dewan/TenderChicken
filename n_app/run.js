@@ -1,10 +1,9 @@
 const express        = require('express');
 var router           = express.Router();
-// const MongoClient    = require('mongodb').MongoClient;
 const bodyParser     = require('body-parser');
 const app            = express();
-// var mongoose = require('mongoose');
 var mysql = require('mysql');
+var formidable = require('formidable');
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -45,6 +44,15 @@ var server = app.listen(port, function() {
 
 app.use('/api', router);
 
+router.get('/test_upload',  function(req, res) {
+	  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.write('<form action="http://localhost:3000/api/fileupload" method="post" enctype="multipart/form-data">');
+  res.write('<input type="file" name="filetoupload"><br>');
+  res.write('<input type="submit">');
+  res.write('</form>');
+  return res.end();
+});
+
 router.get('/make_contract', function(req, res) {
 
 	var id_name = req.query.name
@@ -78,4 +86,12 @@ router.get('/make_contract', function(req, res) {
 						};
     	res.json(glo_hash[req.query.name]);   
 	}, 1000);
+});
+
+router.post('/fileupload', function(){
+	var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+      res.write('File uploaded');
+      res.end();
+    });
 });
