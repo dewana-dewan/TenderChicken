@@ -87,6 +87,18 @@ router.get('/make_contract', function(req, res) {
 	}, 1000);
 });
 
+router.get('/get_contract', function(req, res) {
+	var id_name = req.query.name;
+	var get_sql = "select * from tenders where tenderId='" + id_name + "'";
+	con.query(get_sql, function (err, result) {
+		    if (err) throw err;
+		    console.log("Number of records inserted: " + result.affectedRows);
+		  	console.log(result);
+			res.json(result);
+		  });
+
+});
+
 router.post('/fileupload', upload.single('filetoupload'),  function(req, res, next){
 	console.log(req.file);
 	console.log(req.body);
