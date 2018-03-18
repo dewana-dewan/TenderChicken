@@ -14,4 +14,4 @@ Proposed Model :-
 4. Once the deadline is over, contractors are asked to submit original documents which are then verified with their previous 
 hashes.
 5.  The contract with the lowest bid satisfying the specifiactions is selected automatically and sent to the organisation.
-
+6.  For visiual representation, please refer [ppt](https://docs.google.com/presentation/d/1MFQ319HvEznjbcU4CUoMmsNpxvez_pobo_IwA3YrTNQ/edit?usp=sharing)
