@@ -89,6 +89,9 @@
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
 
+$( document ).ready(function() {
+
+      var hash;
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       var openFile = function(event) {
         //alert("hello
@@ -105,6 +108,7 @@
                 k.innerText = hash;
                 k.style.display = 'block';
         }
+
 
         reader.readAsText(input.files[0]);
       };
@@ -125,9 +129,6 @@
     }
 
       getUrlParameter('tenderId');
-
-
-abi = JSON.parse('[{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"validCandidate","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"votesReceived","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x","type":"bytes32"}],"name":"bytes32ToString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"candidateList","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"voteForCandidate","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"contractOwner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"inputs":[{"name":"candidateNames","type":"bytes32[]"}],"payable":false,"type":"constructor"}]')
 
 function getAbi(){
 
@@ -158,24 +159,37 @@ var xhttp = new XMLHttpRequest();
     }
   };
 
-
+//console.log(t)
 //abi = getAbi();
-
-VotingContract = web3.eth.contract(abi);
-contractInstance = VotingContract.at(t);
 k = document.getElementById("bidder").value;
 
 xhttp.open("GET", "http://localhost:3000/api/get_contract?name=" + k, true);
 xhttp.send();
 
+var VotingContract = null
 
+VotingContract = web3.eth.contract(abi);
+
+console.log(VotingContract);
+
+
+setTimeout(function(){
+
+contractInstance = VotingContract.at(t)
+
+contractInstance.submit_hash(hash, {gas:140000, from: web3.eth.accounts[0]}).then(function() {
+        //console.log(contractInstance.count)
+console.log(hash)
 console.log(k)
 console.log("Hello There")
+});
+}, 1000);
 }
 
 $(document).ready(function() {
     $('select').material_select();
   });
+
 </script>
   </body>
 </html>
