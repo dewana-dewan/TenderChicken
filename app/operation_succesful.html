@@ -25,6 +25,10 @@
 <div class="row" style="width:70vw">
   <br>
     <h1>Operation Succesful</h1>
+    <br>
+          <a style="color: white" href="" id="thelink"><button class="btn waves-effect waves-light">See tender
+          <i class="material-icons right">send</i>
+          </button></a>
 </div>
   <br>
   <br>
@@ -57,23 +61,25 @@
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
+  var reqd;
+  var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
 
-      // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-      var openFile = function(event) {
-        //alert("hello
-        var input = event.target;        
-        var reader = new FileReader();
-            
-                reader.onload = function() {
-                var data = reader.result;
-      }};
-      //           var hash = web3.sha3(data);
-      //           var t = document.getElementById("textHash");         
-      //           t.innerText = hash;
-      //   }
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-      //   reader.readAsText(input.files[0]);
-      // };
+        if (sParameterName[0] === sParam) {
+            reqd = sParameterName[1];
+        }
+    }
+    console.log(sParameterName, sURLVariables, reqd);
+    document.getElementById('thelink').href='http://localhost:3000/api/tender_display?tenderId=' + reqd;
+};
+getUrlParameter('tenderId');
+console.log($('#thelink'));
 
 </script>
   </body>

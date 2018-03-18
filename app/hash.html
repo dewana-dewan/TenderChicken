@@ -23,37 +23,35 @@
 
 	
 
-  <div class="row">
-    <div class="input-field col s6">
-      <input value="" id="bidder" type="text" class="validate">
-      <label class="active" for="title">Enter Your Name</label>
-    </div>
 <div class="row" style="width:70vw">
   <br>
-    <h1>Submit Tender Document</h1>
-    <form action="#">
-
-
+    <h1>Submit Tender Application</h1>
+    <form action="submit_application_hash_success" method="get">
 
     <div class="file-field input-field">
+
       <div class="btn">
         <span>File</span>
         <input type="file" onchange="openFile(event);">
       </div>
       <div class="file-path-wrapper">
+
         <input class="file-path validate" type="text">
+        <input id="tenderId" name="tenderId" style="display: none" class="file-path validate" type="text">
+        <input id="filekahash" name="filekahash" style="display: none" class="file-path validate" type="text">
       </div>
+        <div type="text s12 m8" style="position: block; width: 100%" >
+        <a id = "textHash" style="display: none; width: 100%" class="waves-effect waves-light btn">button</a>
+      </div>
+        <br>
+        <br>
+  
     </div>
+              <button class="btn waves-effect waves-light" type="submit">Send Hash
+          <i class="material-icons right">send</i>
+          </button>
   </form>
-  <form action="#">
-	<div class="input-field">
-      		<div class="btn" onclick="submitHashToContract();">
-       			 <span>Submit</span>
-		</div>
- 		<div type="text" id = "textHash">
-		</div>
-	</div>
-</form>
+
 </div>
   <br>
   <br>
@@ -83,7 +81,11 @@
         </div>
       </div>
     </footer>
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
 
@@ -95,13 +97,34 @@
             
                 reader.onload = function() {
                 var data = reader.result;
+                console.log(this);
                 var hash = web3.sha3(data);
-                var t = document.getElementById("textHash");         
-                t.innerText = hash;
+                var t = document.getElementById("filekahash");
+                var k = document.getElementById("textHash");
+                t.value = hash;
+                k.innerText = hash;
+                k.style.display = 'block';
         }
 
         reader.readAsText(input.files[0]);
       };
+
+      var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+          sURLVariables = sPageURL.split('&'),
+          sParameterName,
+          i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              reqd = sParameterName[1];
+          }
+      }
+    }
+
+      getUrlParameter('tenderId');
 
 
 abi = JSON.parse('[{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"validCandidate","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"votesReceived","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"x","type":"bytes32"}],"name":"bytes32ToString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"candidateList","outputs":[{"name":"","type":"bytes32"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"candidate","type":"bytes32"}],"name":"voteForCandidate","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"contractOwner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"inputs":[{"name":"candidateNames","type":"bytes32[]"}],"payable":false,"type":"constructor"}]')
@@ -150,7 +173,9 @@ console.log(k)
 console.log("Hello There")
 }
 
-
+$(document).ready(function() {
+    $('select').material_select();
+  });
 </script>
   </body>
 </html>

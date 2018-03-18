@@ -28,12 +28,32 @@
     <div class="col s12 m6">
       <div class="card">
         <div class="card-image">
-          <img src="img/isro.svg">
-          <span class="card-title">Card Title</span>
-          <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Indian_Space_Research_Organisation_Logo.svg/2000px-Indian_Space_Research_Organisation_Logo.svg.png">
+          <span class="card-title">{{titlee}}</span>
+          <a href="" id="applylink" class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons" title="apply">send</i></a>
         </div>
         <div class="card-content">
-          <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+          <h4 id="title">Tender title</h4>
+          <ul>
+            <li>
+              <i  style="font-size: 15px" class="material-icons">grade</i><span style="font-size: 18px ; padding-left: 10px" id="org"></span>
+            </li>
+            <li>
+              <i style="font-size: 15px" class="material-icons">access_time</i><span style="font-size: 18px ; padding-left: 10px" id="dead1"></span>
+            <li>
+            <li> 
+              <i style="font-size: 15px" class="material-icons">access_time</i><span style="font-size: 18px ; padding-left: 10px" id="dead2"></span>
+            </li>
+            <li> 
+               <a id="tender_ka_link" href="">
+                <i style="font-size: 15px" class="material-icons">description</i><span style="font-size: 18px; padding-left: 10px" id="pdf">Tender Document</span>
+              </a>
+            </li>
+          </ul>
+          <h7 id='desc'>
+            ajsdhfja asjkdfh asdf s dfas dfmnas dnmmvamdnvma dsmafsbd
+            asdfa a asd sdsd f s fs fss f
+          </h7>
         </div>
       </div>
     </div>
@@ -58,30 +78,51 @@
       </div>
       <div class="footer-copyright">
         <div class="container">
-          Made with <img src="./images/heart.svg" height="12px"> by 
+          Made with <img src="/images/heart.svg" height="12px"> by 
           <a class="grey-text text-lighten-4 " href="https://github.com/Vim-jas">Team Vim-Jas</a>
         </div>
       </div>
-    </footer><script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    </footer>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script type="text/javascript">
+  var reqd;
+  var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
 
-      // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-      var openFile = function(event) {
-        //alert("hello
-        var input = event.target;        
-        var reader = new FileReader();
-            
-                reader.onload = function() {
-                var data = reader.result;
-      }};
-      //           var hash = web3.sha3(data);
-      //           var t = document.getElementById("textHash");         
-      //           t.innerText = hash;
-      //   }
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-      //   reader.readAsText(input.files[0]);
-      // };
+        if (sParameterName[0] === sParam) {
+            reqd = sParameterName[1];
+        }
+    }
+    console.log(sParameterName, sURLVariables, reqd);
+    $.get( "../api/tender_display_getinfo", { tenderId: reqd} )
+      .done(function( data ) {
+        console.log(data);
+        var parsed = data;
+        console.log(parsed);
+        document.getElementById('title').innerHTML = parsed['title']; 
+        document.getElementById('desc').innerHTML = parsed['desc']; 
+        document.getElementById('org').innerHTML = parsed['org']; 
+        document.getElementById('dead1').innerHTML = parsed['dead1']; 
+        document.getElementById('dead2').innerHTML = parsed['dead2'];
+        document.getElementById('dead2').innerHTML = parsed['dead2'];
+        parsed['link_add'] = parsed['link_add'].replace('uploads', '');
+        document.getElementById('tender_ka_link').href = 'http://localhost:3000/api/all_tenders' + parsed['link_add'];
+
+        document.getElementById('applylink').innerHTML = 'http://localhost:3000/api/submit_application?tenderId=' + parsed['title'];
+
+    });
+};
+getUrlParameter('tenderId');
 
 </script>
   </body>
